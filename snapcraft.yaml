@@ -40,8 +40,6 @@ parts:
       - fonts-opensymbol
       - create-resources
       - nginx-extras
-#      - redis-server
-#      - rabbitmq-server
     override-build: |
       rm -f lib/libicuuc.so.58
       rm -f lib/libPdfWriter.so
@@ -59,7 +57,7 @@ parts:
       sed -i -e 's/\/var\/www/%(ENV_SNAP)s\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
       sed -i -e 's/\/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
       sed -i -e 's/\/var\/log/%(ENV_SNAP_USER_COMMON)s\/var\/log/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
-      sed -i -e 's/\/var/%(ENV_SNAP_USER_COMMON)s\/var/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
+      sed -i -e 's/\/var/\/home\/igor\/snap\/docserver\/common\/var/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
       sed -i -e 's/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
       sed -i -e 's/\/var\/www/%(ENV_SNAP)s\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
       sed -i -e 's/\/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
@@ -73,13 +71,26 @@ parts:
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds-ssl.conf.tmpl
       sed -i -e 's/var\//home\/igor\/snap\/docserver\/common\/var\//g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-common.conf
       sed -i -e 's/var/snap\/docserver\/current\/var/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-docservice.conf
+      sed -i -e 's/var\//home\/igor\/snap\/docserver\/common\/var\//g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/nginx/includes/ds-example.conf
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       sed -i -e 's/var\//home\/igor\/snap\/docserver\/common\/var\//g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       rm -f $SNAPCRAFT_PART_INSTALL/etc/nginx/sites-enabled/default
-      sed -i -e 's/var\//home\/igor\/snap\/docserver\/common\/var\//g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/nginx/includes/ds-example.conf
-      sed -i -e 's/user www-data;/user igor;/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
-      sed -i -e 's/run/home\/igor\/snap\/docserver\/common/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
+      sed -i -e 's/run/home\/igor\/snap\/docserver\/common\/run/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       cp $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds.conf $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
+      sed -i -e 's/usr\/sbin\/nginx/snap\/docserver\/current\/usr\/sbin\/nginx/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
+      sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
+      sed -i -e 's/lib/snap\/docserver\/current\/lib/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
+      sed -i -e 's/run/home\/igor\/snap\/docserver\/common\/run/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
+      sed -i -e 's/var/home\/igor\/snap\/docserver\/common\/var/g' $SNAPCRAFT_PART_INSTALL/etc/logrotate.d/nginx
+      sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/logrotate.d/nginx
+      sed -i -e 's/run/home\/igor\/snap\/docserver\/common\/run/g' $SNAPCRAFT_PART_INSTALL/lib/systemd/system/nginx.service
+      sed -i -e 's/usr\/sbin\/nginx/snap\/docserver\/current\/usr\/sbin\/nginx/g' $SNAPCRAFT_PART_INSTALL/lib/systemd/system/nginx.service
+      sed -i -e 's/usr\/sbin\/nginx/snap\/docserver\/current\/usr\/sbin\/nginx/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/supervisor
+      sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/supervisor
+      sed -i -e 's/lib/snap\/docserver\/current\/lib/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/supervisor
+      sed -i -e 's/var/home\/igor\/snap\/docserver\/common\/var/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/supervisor
+      sed -i -e 's/user www-data;/user igor;/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
+#      cp -s $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf /etc/nginx/conf.d/ds.conf
 #      sed -i -e 's/80/1200/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/sites-available/default
   node:
     plugin: dump
