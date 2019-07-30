@@ -11,7 +11,7 @@ architectures:
 apps:
   docserver:
     adapter: full
-    command: usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf 
+    command: bin/start
     plugs:
       - home
       - desktop
@@ -39,7 +39,9 @@ parts:
       - fonts-takao-gothic
       - fonts-opensymbol
       - create-resources
-      - nginx-extras
+      - redis-server
+      - rabbitmq-server
+      - postgresql
     override-build: |
       rm -f lib/libicuuc.so.58
       rm -f lib/libPdfWriter.so
@@ -66,6 +68,8 @@ parts:
       sed -i -e 's/user=ds/;user=ds/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/*
       sed -i -e 's/var/snap\/docserver\/current\/var/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json 
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json
+      sed -i -e 's/usr/snap\/docserver\/current\/usr/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json
+      sed -i -e 's/web-apps/snap\/docserver\/current\/var\/www\/onlyoffice\/documentserver\/web-apps/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds.conf
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds.conf.tmpl
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds-ssl.conf.tmpl
@@ -96,9 +100,8 @@ parts:
     plugin: dump
     source: https://nodejs.org/dist/v8.12.0/node-v8.12.0-linux-x64.tar.gz
 
-#  starter:
-#    plugin: dump
-#    source: snap/config
-#    organize:
-#      ds.conf: etc/nginx/conf.d/ds.conf
-#      start: nginx.conf
+  starter:
+    plugin: dump
+    source: snap/config
+    organize:
+      start: bin/start
