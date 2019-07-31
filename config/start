@@ -24,4 +24,5 @@ touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/nginx.error.log
 touch $SNAP_USER_COMMON/var/log/nginx/access.log
 touch $SNAP_USER_COMMON/var/log/nginx/error.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/out.log
+touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/err.log
 $SNAP/usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf
