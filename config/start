@@ -8,7 +8,6 @@ mkdir -p $SNAP_USER_COMMON/var/log/supervisor/
 mkdir -p $SNAP_USER_COMMON/var/run/
 mkdir -p $SNAP_USER_COMMON/var/log/nginx/
 mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example
-mkdir -p $SNAP_USER_COMMON/var/home/igor/snap/docserver/common/run/
 touch $SNAP_USER_COMMON/var/log/supervisor/supervisord.log
 touch $SNAP_USER_COMMON/var/run/supervisord.pid
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/out.log
@@ -27,7 +26,7 @@ touch $SNAP_USER_COMMON/var/log/nginx/error.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/out.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/err.log
 mkdir -p /home/igor/snap/docserver/common/var/cache/nginx/client_temp
-touch $SNAP_USER_COMMON/var/home/igor/snap/docserver/common/run/nginx.pid
+touch $SNAP_USER_COMMON/var/run/nginx.pid
 mkdir -p $SNAP_USER_COMMON/var/docserver/common/run/
-touch $SNAP_USER_COMMON/var/docserver/common/run/nginx.pid
+#cp -rp /snap/docserver/current/lib/systemd/system/* /lib/systemd/system/
 $SNAP/usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf
