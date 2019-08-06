@@ -6,7 +6,7 @@ mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/metrics/
 mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/spellchecker/
 mkdir -p $SNAP_USER_COMMON/var/log/supervisor/
 mkdir -p $SNAP_USER_COMMON/var/run/
-mkdir -p $SNAP_USER_COMMON/var/log/nginx/
+#mkdir -p $SNAP_USER_COMMON/var/log/nginx/
 mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example
 touch $SNAP_USER_COMMON/var/log/supervisor/supervisord.log
 touch $SNAP_USER_COMMON/var/run/supervisord.pid
@@ -20,13 +20,14 @@ touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/metrics/out.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/metrics/err.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/spellchecker/out.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/spellchecker/err.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/nginx.error.log
-touch $SNAP_USER_COMMON/var/log/nginx/access.log
-touch $SNAP_USER_COMMON/var/log/nginx/error.log
+#touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/nginx.error.log
+#touch $SNAP_USER_COMMON/var/log/nginx/access.log
+#touch $SNAP_USER_COMMON/var/log/nginx/error.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/out.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/err.log
-mkdir -p /home/igor/snap/docserver/common/var/cache/nginx/client_temp
-touch $SNAP_USER_COMMON/var/run/nginx.pid
-mkdir -p $SNAP_USER_COMMON/var/docserver/common/run/
+mkdir -p $SNAP_USER_COMMON/var/cache/nginx/client_temp
+#touch $SNAP_USER_COMMON/var/run/nginx.pid
+#mkdir -p $SNAP_USER_COMMON/var/docserver/common/run/
 #cp -rp /snap/docserver/current/lib/systemd/system/* /lib/systemd/system/
-$SNAP/usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf
+$SNAP/usr/sbin/nginx; $SNAP/usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf
+$SNAP/usr/sbin/nginx -s stop
