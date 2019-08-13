@@ -1,36 +1,38 @@
 #!/bin/bash
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$SNAP/lib/"
-mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/
-mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/converter/
-mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/gc/
-mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/metrics/
-mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/spellchecker/
-mkdir -p $SNAP_USER_COMMON/var/log/supervisor/
-mkdir -p $SNAP_USER_COMMON/var/run/
-mkdir -p $SNAP_USER_COMMON/var/log/nginx/
-mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example
-touch $SNAP_USER_COMMON/var/log/supervisor/supervisord.log
-touch $SNAP_USER_COMMON/var/run/supervisord.pid
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/out.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/err.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/converter/out.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/converter/err.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/gc/out.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/gc/err.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/metrics/out.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/metrics/err.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/spellchecker/out.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/spellchecker/err.log
-#touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/nginx.error.log
-#touch $SNAP_USER_COMMON/var/log/nginx/access.log
-touch $SNAP_USER_COMMON/var/log/nginx/error.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/out.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/err.log
-mkdir -p $SNAP_USER_COMMON/var/cache/nginx/client_temp
-#touch $SNAP_USER_COMMON/var/run/nginx.pid
-#mkdir -p $SNAP_USER_COMMON/var/docserver/common/run/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/converter/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/gc/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/metrics/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/spellchecker/
+mkdir -p $SNAP_DATA/var/log/supervisor/
+mkdir -p $SNAP_DATA/var/run/
+mkdir -p $SNAP_DATA/var/log/nginx/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver-example
+touch $SNAP_DATA/var/log/supervisor/supervisord.log
+touch $SNAP_DATA/var/run/supervisord.pid
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/converter/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/converter/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/gc/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/gc/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/metrics/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/metrics/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/spellchecker/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/spellchecker/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/nginx.error.log
+touch $SNAP_DATA/var/log/nginx/access.log
+touch $SNAP_DATA/var/log/nginx/error.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver-example/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver-example/err.log
+mkdir -p $SNAP_DATA/var/cache/nginx/client_temp
+mkdir -p $SNAP_DATA/var/run
+touch $SNAP_DATA/var/run/supervisord.pid
+#touch $SNAP_DATA/var/run/nginx.pid
+#mkdir -p $SNAP_DATA/var/docserver/common/run/
 #cp -rp /snap/docserver/current/lib/systemd/system/* /lib/systemd/system/
-mkdir -p $SNAP_USER_COMMON/var/www/onlyoffice/documentserver-example
+mkdir -p $SNAP_DATA/var/www/onlyoffice/documentserver-example
 cp -r /snap/docserver/current/var/www/onlyoffice/documentserver-example/public /home/igor/snap/docserver/common/var/www/onlyoffice/documentserver-example/
 $SNAP/usr/sbin/nginx; $SNAP/usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf
 $SNAP/usr/sbin/nginx -s stop
