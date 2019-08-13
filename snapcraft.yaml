@@ -32,18 +32,8 @@ apps:
     daemon: simple
     plugs: [network, network-bind]
 
-
-#layout:
-  #$SNAP/var/run/supervisord.pid:
-    #bind-file: $SNAP_DATA/var/run/supervisord.pid
-  #$SNAP/var/log/onlyoffice/documentserver/docservice:
-    #bind: $SNAP_DATA/var/log/onlyoffice/documentserver/docservice
-  #$SNAP/var/log/onlyoffice/documentserver/docservice/out.log:
-    #bind-file: $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/out.log
-  #$SNAP/var/log/onlyoffice/documentserver/docservice/err.log:
-    #bind-file: $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/err.log
-
-
+  #redis:
+    #command: whereis redis
 
 parts:  
   docserver:
@@ -78,15 +68,11 @@ parts:
       sed -i -e 's/\/var\/www/%(ENV_SNAP)s\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
       sed -i -e 's/\/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
       sed -i -e 's/\/var\/log/%(ENV_SNAP_DATA)s\/var\/log/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
-      #sed -i -e 's/%(ENV_SNAP_USER_COMMON)s\/var\/log/%(ENV_SNAP_DATA)s\/var\/log/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/ds-docservice.conf
-      #sed -i -e 's/\/var/%(ENV_SNAP_USER_COMMON)s\/var/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
-      #sed -i -e 's/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
       sed -i -e 's/\/var\/www/%(ENV_SNAP)s\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
       sed -i -e 's/\/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
       sed -i -e 's/\/var\/log/%(ENV_SNAP_DATA)s\/var\/log/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
       sed -i -e 's/user=ds/;user=ds/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
       sed -i -e 's/user=ds/;user=ds/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/*
-      #sed -i -e 's/%(ENV_SNAP_USER_COMMON)s\/var\/run\/supervisord/%(ENV_SNAP_DATA)s\/var\/run\/supervisord/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
       # edition production-linux.json 
       #sed -i -e 's/var\/www/snap\/docserver\/current\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json 
       #sed -i -e 's/var\/lib/snap\/docserver\/current\/var\/lib/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json 
@@ -95,9 +81,6 @@ parts:
       #sed -i -e 's/web-apps\/vendor/snap\/docserver\/current\/var\/www\/onlyoffice\/documentserver\/web-apps\/vendor/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json
       # edition etc/onlyoffice/documentserver/nginx/ds...
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds.conf
-      sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds.conf.tmpl
-      sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/ds-ssl.conf.tmpl
-      #sed -i -e 's/var\//home\/igor\/snap\/docserver\/common\/var\//g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-common.conf
       sed -i -e 's/var\/log\/onlyoffice\/documentserver\/nginx.error.log/dev\/stdout/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-common.conf
       sed -i -e 's/var\/www/snap\/docserver\/current\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-docservice.conf
       sed -i -e 's/var\/lib/var\/snap\/docserver\/common\/var\/lib/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-docservice.conf
@@ -111,96 +94,71 @@ parts:
       mv $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/production-linux.json-old
       mv $SNAPCRAFT_PART_INSTALL/etc/supervisor/conf.d/ds-example.conf $SNAPCRAFT_PART_INSTALL/etc/supervisor/conf.d/ds-example.conf-old
       sed -i -e 's/web-apps/snap\/docserver\/current\/var\/www\/onlyoffice\/documentserver\/web-apps/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/default.json
-      #sed -i '4d' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/production-linux.json
-      #sed -i -e 's/"siteUrl"':' "\/",/"port"':' 2000,\n    "siteUrl"':' "http':'\/\/127.0.0.1:8000\/",\n     "apiUrl"':' "snap\/docserver\/current\/var\/www\/onlyoffice\/documentserver\/web-apps\/apps\/api\/documents\/api.js",\n    "preloaderUrl"':' "snap\/docserver\/current\/var\/www\/onlyoffice\/documentserver\/web-apps\/apps\/api\/documents\/cache-scripts.html"/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/production-linux.json
-      mkdir -p $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/public/files
-      mkdir -p $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/public/files/__1
-      ###
-      #sed -i -e 's/"files/"home\/igor\/snap\/docserver\/common\/var\/lib\/onlyoffice\/documentserver-example\/public\/files/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/default.json
-      #sed -i -e 's/"path"':' "public"/"path"':' "home\/igor\/snap\/docserver\/common\/var\/lib\/onlyoffice\/documentserver-example\/public"/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/default.json
-      #sed -i '28,33d' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/default.json
-      #sed -i -e 's/80/1200/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/sites-available/default
+      #mkdir -p $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/public/files
+      #mkdir -p $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/public/files/__1
       # copy lib
       cp $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver/server/FileConverter/bin/*.so $SNAPCRAFT_PART_INSTALL/lib/
       cp $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver/server/FileConverter/bin/libicuuc.so.58 $SNAPCRAFT_PART_INSTALL/lib/
       cp $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver/server/FileConverter/bin/libicudata.so.58 $SNAPCRAFT_PART_INSTALL/lib/
-      #mv ds-common.conf
-      #mv $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-common.conf $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/nginx/includes/ds-common.conf-old
-      #example
-      #sed -i -e 's/".\/public", c/c/g' $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/app.js
-      #sed -i -e 's/"files"/"home\/igor\/snap\/docserver\/common\/var\/www\/onlyoffice\/documentserver-example\/public\/files"/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/default.json
-      #sed -i 's/let directory = path.join(docManager.dir, "public", /let directory = path.join(/g' $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/helpers/docManager.js
-      #sed -i -e 's/docManager.dir, "public",//g' $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/helpers/docManager.js
+      # mv docManager.js and default.json
       mv $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/helpers/docManager.js $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver-example/helpers/docManager.js-old
       mv $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/default.json $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/default.json-old
-      #documentserver-generate-allfonts.sh
+      # documentserver-generate-allfonts.sh
       sed -i -e 's/DIR="/DIR="$SNAPCRAFT_PART_INSTALL/g' $SNAPCRAFT_PART_INSTALL/usr/bin/documentserver-generate-allfonts.sh
       sed -i -e 's/echo -n Generating AllFonts.js, please wait.../echo -n Generating AllFonts.js, please wait...\nexport LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:\$SNAPCRAFT_PART_INSTALL\/lib:$LD_LIBRARY_PATH"/g' $SNAPCRAFT_PART_INSTALL/usr/bin/documentserver-generate-allfonts.sh
       sed -i -e 's/--use-system="true"/--use-system="false"/g' $SNAPCRAFT_PART_INSTALL/usr/bin/documentserver-generate-allfonts.sh
       sed -i -e 's/chown/#chown/g' $SNAPCRAFT_PART_INSTALL/usr/bin/documentserver-generate-allfonts.sh
       mkdir -p $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver/fonts
-      #documentserver-generate-allfonts.sh true
       DIR="$SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver"
       "$DIR/server/tools/AllFontsGen" --input="$DIR/core-fonts"  --allfonts-web="$DIR/sdkjs/common/AllFonts.js"  --allfonts="$DIR/server/FileConverter/bin/AllFonts.js"  --images="$DIR/sdkjs/common/Images"   --selection="$DIR/server/FileConverter/bin/font_selection.bin"  --output-web="$DIR/fonts"  --use-system="false"
-      #sed -i -e 's/"rejectUnauthorized"':' true/"rejectUnauthorized"':' false/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/default.json
-      #mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/
-
 
 
   node:
     plugin: dump
     source: https://nodejs.org/dist/v8.12.0/node-v8.12.0-linux-x64.tar.gz
+    override-build: |
+      snapcraftctl build
+      rm -f $SNAPCRAFT_PART_INSTALL/README.md
 
   nginx:
     plugin: dump
-    source: snap/nginx_1.13.9-1~xenial_amd64_perl.deb
+    source: snap/nginx_1.13.9-1~xenial_amd.deb
     source-type: deb
     stage-packages:
       - supervisor
+      - redis-server
+      - rabbitmq-server
     override-build: |
+      # remove
       rm -f etc/nginx/modules
-      #rm -f etc/nginx/conf.d/default.conf
+      rm -f $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/default.conf
       snapcraftctl build
       #################################
-      #sed -i -e 's/%(ENV_SNAP_USER_COMMON)s\/var\/log/%(ENV_SNAP_DATA)s\/var\/log/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/ds-docservice.conf
       sed -i -e 's/\/var/%(ENV_SNAP_DATA)s\/var/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
       sed -i -e 's/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
-      #sed -i -e 's/\/var\/www/%(ENV_SNAP)s\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
-      #sed -i -e 's/\/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
-      #sed -i -e 's/\/var\/log/%(ENV_SNAP_USER_COMMON)s\/var\/log/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/ds-example.conf
-      #sed -i -e 's/user=ds/;user=ds/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
-      #sed -i -e 's/user=ds/;user=ds/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver-example/supervisor/*
       sed -i -e 's/usr\/sbin\/nginx/snap\/docserver\/current\/usr\/sbin\/nginx/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/supervisor
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/supervisor
       sed -i -e 's/lib/snap\/docserver\/current\/lib/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/supervisor
-      sed -i -e 's/%(ENV_SNAP_DATA)s\/var\/run\/supervisord/%(ENV_SNAP_DATA)s\/var\/run\/supervisord/g' $SNAPCRAFT_PART_INSTALL/etc/supervisor/supervisord.conf
       ####################################
       sed -i -e 's/var\/log\/nginx\/error.log warn/dev\/stdout/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       sed -i -e 's/var\/log\/nginx\/access.log  main/dev\/stdout/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       sed -i '6d' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
-      #sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
-      #sed -i -e 's/var/home\/igor\/snap\/docserver\/common\/var/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
-      #############################################
-      ###sed -i -e 's/run/home\/igor\/snap\/docserver\/common\/run/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
-      ##mv $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf-old
-      #sed -i -e 's/usr\/sbin\/nginx/snap\/docserver\/current\/usr\/sbin\/nginx/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
-      #sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
-      #sed -i -e 's/lib/snap\/docserver\/current\/lib/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
-      #sed -i -e 's/run/home\/igor\/snap\/docserver\/common\/run/g' $SNAPCRAFT_PART_INSTALL/etc/init.d/nginx
-      #
-      #sed -i -e 's/var/home\/igor\/snap\/docserver\/common\/var/g' $SNAPCRAFT_PART_INSTALL/etc/logrotate.d/nginx
-      #sed -i -e 's/etc/snap\/docserver\/current\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/logrotate.d/nginx
-      #sed -i -e 's/var\/run/home\/igor\/snap\/docserver\/common\/var\/run/g' $SNAPCRAFT_PART_INSTALL/lib/systemd/system/nginx.service
-      #sed -i -e 's/usr\/sbin\/nginx/snap\/docserver\/current\/usr\/sbin\/nginx/g' $SNAPCRAFT_PART_INSTALL/lib/systemd/system/nginx.service
-      #sed -i -e 's/80/2000/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/default.conf
-      #sed -i -e 's/usr/snap\/docserver\/current\/usr/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/default.conf
-      rm -f $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/default.conf
       ######################
       cp /root/parts/docserver/install/etc/onlyoffice/documentserver/nginx/ds.conf $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
-      sed -i -e 's/80/2000/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
-      #sed -i -e 's/server_tokens off;/server_tokens off;\n  location \/ {\n    perl_set $SNAP_USER_COMMON 'sub { return $ENV{"SNAP_USER_COMMON"}; }';\n }/g'
+      #sed -i -e 's/80/2000/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
+      sed -i -e 's/user  nginx;/user  root;/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
+      sed -i -e 's/#ulimit -n 1024/RABBITMQ_MNESIA_BASE=$SNAP\/var\/lib\/rabbitmq\/mnesia\//g' $SNAPCRAFT_PART_INSTALL/etc/default/rabbitmq-server
+      sed -i -e 's/\/usr\/lib/\${SNAP}\/usr\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
+      sed -i -e 's/var\/lib/\${SNAP}\/var\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
+      
 
+  #redis:
+    #plugin: dump
+    #source: http://download.redis.io/releases/redis-5.0.5.tar.gz
+    #filesets:
+      #allbutman: [-README.md]
+    #dir ${SNAP_DATA}/
 
 
 
@@ -216,5 +174,4 @@ parts:
       proxy_params: etc/nginx/proxy_params
       docManager.js: var/www/onlyoffice/documentserver-example/helpers/docManager.js
       default.json: etc/onlyoffice/documentserver-example/default.json
-      #x2t.sh: var/www/onlyoffice/documentserver/server/FileConverter/bin/x2t.sh
 

@@ -33,6 +33,6 @@ touch $SNAP_DATA/var/run/supervisord.pid
 #mkdir -p $SNAP_DATA/var/docserver/common/run/
 #cp -rp /snap/docserver/current/lib/systemd/system/* /lib/systemd/system/
 mkdir -p $SNAP_DATA/var/www/onlyoffice/documentserver-example
-cp -r /snap/docserver/current/var/www/onlyoffice/documentserver-example/public /home/igor/snap/docserver/common/var/www/onlyoffice/documentserver-example/
-$SNAP/usr/sbin/nginx; $SNAP/usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf
+#cp -r /snap/docserver/current/var/www/onlyoffice/documentserver-example/public /var/snap/docserver/common/var/www/onlyoffice/documentserver-example/
+$SNAP/usr/sbin/nginx; redis-server; $SNAP/usr/bin/python $SNAP/usr/bin/supervisord -n -c $SNAP/etc/supervisor/supervisord.conf
 $SNAP/usr/sbin/nginx -s stop
