@@ -12,6 +12,8 @@ apps:
   docserver:
     adapter: full
     command: bin/start
+    #command-chain:
+      #- usr/lib/rabbitmq/bin/rabbitmq-server
     #daemon: simple
     plugs:
       - home
@@ -29,11 +31,11 @@ apps:
   nginx:
     adapter: full
     command: usr/sbin/nginx
+    #command-chain:
+      #- usr/bin/redis-server
     daemon: simple
     plugs: [network, network-bind]
 
-  #redis:
-    #command: whereis redis
 
 parts:  
   docserver:
@@ -50,6 +52,7 @@ parts:
       - fonts-takao-gothic
       - fonts-opensymbol
       - create-resources
+      - rabbitmq-server
     override-build: |
       rm -f lib/libicuuc.so.58
       rm -f lib/libPdfWriter.so
@@ -111,6 +114,12 @@ parts:
       mkdir -p $SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver/fonts
       DIR="$SNAPCRAFT_PART_INSTALL/var/www/onlyoffice/documentserver"
       "$DIR/server/tools/AllFontsGen" --input="$DIR/core-fonts"  --allfonts-web="$DIR/sdkjs/common/AllFonts.js"  --allfonts="$DIR/server/FileConverter/bin/AllFonts.js"  --images="$DIR/sdkjs/common/Images"   --selection="$DIR/server/FileConverter/bin/font_selection.bin"  --output-web="$DIR/fonts"  --use-system="false"
+      # rabbitmq-server
+      mv $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.10/sbin/rabbitmq-env $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.10/sbin/rabbitmq-env-old
+      sed -i -e 's/\/usr\/lib/\${SNAP}\/usr\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
+      sed -i -e 's/var\/lib/\${SNAP}\/var\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
+      sed -i -e 's/var\/log/\${SNAP_DATA}\/var\/log/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
+      sed -i -e 's/ROOTDIR=/ROOTDIR=$SNAP/g' $SNAPCRAFT_PART_INSTALL/usr/lib/erlang/bin/erl
 
 
   node:
@@ -127,7 +136,6 @@ parts:
     stage-packages:
       - supervisor
       - redis-server
-      - rabbitmq-server
     override-build: |
       # remove
       rm -f etc/nginx/modules
@@ -148,18 +156,6 @@ parts:
       cp /root/parts/docserver/install/etc/onlyoffice/documentserver/nginx/ds.conf $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
       #sed -i -e 's/80/2000/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
       sed -i -e 's/user  nginx;/user  root;/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
-      sed -i -e 's/#ulimit -n 1024/RABBITMQ_MNESIA_BASE=$SNAP\/var\/lib\/rabbitmq\/mnesia\//g' $SNAPCRAFT_PART_INSTALL/etc/default/rabbitmq-server
-      sed -i -e 's/\/usr\/lib/\${SNAP}\/usr\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
-      sed -i -e 's/var\/lib/\${SNAP}\/var\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
-      
-
-  #redis:
-    #plugin: dump
-    #source: http://download.redis.io/releases/redis-5.0.5.tar.gz
-    #filesets:
-      #allbutman: [-README.md]
-    #dir ${SNAP_DATA}/
-
 
 
 
@@ -174,4 +170,5 @@ parts:
       proxy_params: etc/nginx/proxy_params
       docManager.js: var/www/onlyoffice/documentserver-example/helpers/docManager.js
       default.json: etc/onlyoffice/documentserver-example/default.json
-
+      rabbitmq-env.conf: etc/rabbitmq/rabbitmq-env.conf
+      rabbitmq-env: usr/lib/rabbitmq/lib/rabbitmq_server-3.6.10/sbin/rabbitmq-env
