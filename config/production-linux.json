@@ -59,7 +59,7 @@
     }
   },
   "FileStorage": {
-    "directory": "/home/igor/snap/docserver/common/var/lib/onlyoffice/documentserver/App_Data"
+    "directory": "/snap/docserver/common/var/lib/onlyoffice/documentserver/App_Data"
   }
 }
 
