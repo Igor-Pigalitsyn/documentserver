@@ -4,7 +4,7 @@
   },
   "storage": {
     "fs": {
-      "folderPath": "/home/igor/snap/docserver/common/var/lib/onlyoffice/documentserver/App_Data/cache/files"
+      "folderPath": "/var/snap/docserver/common/var/lib/onlyoffice/documentserver/App_Data/cache/files"
     }
   },
   "services": {
@@ -59,7 +59,7 @@
     }
   },
   "FileStorage": {
-    "directory": "/snap/docserver/common/var/lib/onlyoffice/documentserver/App_Data"
+    "directory": "/var/snap/docserver/common/var/lib/onlyoffice/documentserver/App_Data"
   }
 }
 

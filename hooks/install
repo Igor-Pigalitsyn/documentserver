@@ -1,5 +1,5 @@
 #!/bin/sh -e
-mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/
+#mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/
 mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/converter/
 mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/gc/
 mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/metrics/
@@ -9,9 +9,9 @@ mkdir -p $SNAP_USER_COMMON/var/run/
 mkdir -p $SNAP_USER_COMMON/var/log/nginx/
 mkdir -p $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example
 touch $SNAP_USER_COMMON/var/log/supervisor/supervisord.log
-touch $SNAP_USER_COMMON/var/run/supervisord.pid
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/out.log
-touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/err.log
+#touch $SNAP_USER_COMMON/var/run/supervisord.pid
+#touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/out.log
+#touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/docservice/err.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/converter/out.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/converter/err.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/gc/out.log
@@ -24,6 +24,8 @@ touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver/nginx.error.log
 touch $SNAP_USER_COMMON/var/log/nginx/access.log
 touch $SNAP_USER_COMMON/var/log/nginx/error.log
 touch $SNAP_USER_COMMON/var/log/onlyoffice/documentserver-example/out.log
+#mkdir -p $SNAP_COMMON/var/run
+#touch $SNAP_COMMON/var/run/supervisord.pid
 #ln -s $SNAP/etc/onlyoffice/docserver/nginx/ds.conf $SNAP/etc/nginx/conf.d/ds.conf
 #adduser --quiet --home snap/docserver/current/var/www/onlyoffice/documentserver --system --group ds
 #adduser --quiet www-data ds

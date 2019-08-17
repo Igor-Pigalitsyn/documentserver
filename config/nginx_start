@@ -1,0 +1,7 @@
+#!/bin/bash
+
+mkdir -p $SNAP_DATA/var/cache/nginx/client_temp
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/nginx.error.log
+touch $SNAP_DATA/var/log/nginx/access.log
+touch $SNAP_DATA/var/log/nginx/error.log
+$SNAP/usr/sbin/nginx
