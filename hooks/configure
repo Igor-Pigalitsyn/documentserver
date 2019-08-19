@@ -1,3 +1,4 @@
 #!/bin/sh
 #snapctl set ports.http=80
 #snapctl restart docserver.nginx
+#snap restart docserver.nginx

@@ -19,8 +19,6 @@ RABBITMQ_LOG_BASE="$SNAP_DATA/var/log/rabbitmq"
 RABBITMQ_GENERATED_CONFIG_DIR="$SNAP_DATA/var/lib/rabbitmq/config"
 RABBITMQ_SCHEMA_DIR="$SNAP_DATA/var/lib/rabbitmq/schema"
 RABBITMQ_CONF_ENV_FILE="$SNAP/rabbitmq-env.conf"
-#RABBITMQ_PLUGINS_DIR="$SNAP_DATA/var/lib/rabbitmq/plugins"
-
 
 if [ "$RABBITMQ_ENV_LOADED" = 1 ]; then
     return 0;
@@ -83,10 +81,14 @@ RABBITMQ_HOME="$(rmq_realpath "${RABBITMQ_SCRIPTS_DIR}/..")"
 ## Set defaults
 . ${RABBITMQ_SCRIPTS_DIR}/rabbitmq-defaults
 
+## Get configuration variables from the configure environment file
+[ "x" = "x$RABBITMQ_CONF_ENV_FILE" ] && RABBITMQ_CONF_ENV_FILE=${CONF_ENV_FILE}
+[ -f ${RABBITMQ_CONF_ENV_FILE} ] && . ${RABBITMQ_CONF_ENV_FILE} || true
+
 DEFAULT_SCHEDULER_BIND_TYPE="db"
 [ "x" = "x$RABBITMQ_SCHEDULER_BIND_TYPE" ] && RABBITMQ_SCHEDULER_BIND_TYPE=${DEFAULT_SCHEDULER_BIND_TYPE}
 
-DEFAULT_DISTRIBUTION_BUFFER_SIZE=32000
+DEFAULT_DISTRIBUTION_BUFFER_SIZE=128000
 [ "x" = "x$RABBITMQ_DISTRIBUTION_BUFFER_SIZE" ] && RABBITMQ_DISTRIBUTION_BUFFER_SIZE=${DEFAULT_DISTRIBUTION_BUFFER_SIZE}
 
 ## Common defaults
@@ -96,11 +98,6 @@ SERVER_ERL_ARGS="+P 1048576 +t 5000000 +stbt $RABBITMQ_SCHEDULER_BIND_TYPE +zdbb
 # an init script. If $CONF_ENV_FILE overrides it again, we must ignore
 # it and warn the user.
 saved_RABBITMQ_PID_FILE=$RABBITMQ_PID_FILE
-
-## Get configuration variables from the configure environment file
-[ "x" = "x$RABBITMQ_CONF_ENV_FILE" ] && RABBITMQ_CONF_ENV_FILE=${CONF_ENV_FILE}
-
-[ -f ${RABBITMQ_CONF_ENV_FILE} ] && . ${RABBITMQ_CONF_ENV_FILE} || true
 
 if [ "$saved_RABBITMQ_PID_FILE" -a \
      "$saved_RABBITMQ_PID_FILE" != "$RABBITMQ_PID_FILE" ]; then

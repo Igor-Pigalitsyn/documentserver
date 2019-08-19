@@ -30,33 +30,40 @@ apps:
   
   nginx:
     #adapter: full
-    command: usr/sbin/nginx
-    stop-command: usr/sbin/nginx -s stop
+    command: usr/nginx_start
+    stop-command: usr/nginx_start -s stop
     daemon: simple
     restart-condition: always
     plugs: [network, network-bind, removable-media]
-    
 
   rabbitmq:
     command: usr/lib/rabbitmq/bin/rabbitmq-server
     daemon: simple
 
+  #redis:
+    #command: whereis redis-server
+    #daemon: simple
+
 
 parts:
+  #redis:
+    #plugin: dump
+    #source: http://download.redis.io/releases/redis-5.0.5.tar.gz
+    
   rabbitmq:
     plugin: dump
-    source: https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.7.17/rabbitmq-server_3.7.17-1_all.deb
+    source: https://github.com/rabbitmq/rabbitmq-server/releases/download/rabbitmq_v3_6_15/rabbitmq-server_3.6.15-1_all.deb
     source-type: deb
-    #stage-packages:
-      #- er
+    stage-packages:
+      - erlang
     override-build: |
       snapcraftctl build
       # rabbitmq-server
-      mv $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/lib/rabbitmq_server-3.7.17/sbin/rabbitmq-env $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/lib/rabbitmq_server-3.7.17/sbin/rabbitmq-env-old
+      mv $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.15/sbin/rabbitmq-env $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.15/sbin/rabbitmq-env-old
       #sed -i -e 's/\/usr\/lib/\${SNAP}\/usr\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
       #sed -i -e 's/var\/lib/\${SNAP}\/var\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
       #sed -i -e 's/var\/log/\${SNAP_DATA}\/var\/log/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
-      #sed -i -e 's/ROOTDIR=/ROOTDIR=$SNAP/g' $SNAPCRAFT_PART_INSTALL/usr/lib/erlang/bin/erl
+      sed -i -e 's/ROOTDIR=/ROOTDIR=$SNAP/g' $SNAPCRAFT_PART_INSTALL/usr/lib/erlang/bin/erl
 
   docserver:
     plugin: dump
@@ -72,13 +79,14 @@ parts:
       - fonts-takao-gothic
       - fonts-opensymbol
       - create-resources
+      - libreadline-dev
       #- rabbitmq-server
       #- postgresql
       #- locales
       #- locales-all
       #- libc-bin
-    #stage-snaps:
-      #- postgresql96
+    stage-snaps:
+      - postgresql96
     override-build: |
       rm -f lib/libicuuc.so.58
       rm -f lib/libPdfWriter.so
@@ -93,6 +101,8 @@ parts:
       rm -f lib/libicudata.so.58
       rm -f lib/libgraphics.so
       snapcraftctl build
+      # posgresql
+      cp $SNAPCRAFT_PART_INSTALL/lib/x86_64-linux-gnu/libreadline.so.7.0 $SNAPCRAFT_PART_INSTALL/lib/x86_64-linux-gnu/libreadline.so.6
       # edition supervisor/* && /supervisord.conf ds-example.conf
       sed -i -e 's/\/var\/www/%(ENV_SNAP)s\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
       sed -i -e 's/\/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
@@ -161,7 +171,7 @@ parts:
     source-type: deb
     stage-packages:
       - supervisor
-      #- redis-server
+      - redis-server
     override-build: |
       # remove
       rm -f etc/nginx/modules
@@ -182,7 +192,7 @@ parts:
       ######################
       sed -i -e 's/user  nginx;/user root;/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       cp /root/parts/docserver/install/etc/onlyoffice/documentserver/nginx/ds.conf $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
-      sed -i -e 's/80/2000/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
+      #sed -i -e 's/80/2000/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/ds.conf
       sed -i -e 's/user  nginx;/user  root;/g' $SNAPCRAFT_PART_INSTALL/etc/nginx/nginx.conf
       rm -f $SNAPCRAFT_PART_INSTALL/etc/nginx/conf.d/default.conf
 
@@ -200,5 +210,5 @@ parts:
       docManager.js: var/www/onlyoffice/documentserver-example/helpers/docManager.js
       default.json: etc/onlyoffice/documentserver-example/default.json
       rabbitmq-env.conf: etc/rabbitmq/rabbitmq-env.conf
-      rabbitmq-env: usr/lib/rabbitmq/lib/rabbitmq_server-3.7.17/sbin/rabbitmq-env
+      rabbitmq-env: usr/lib/rabbitmq/lib/rabbitmq_server-3.6.15/sbin/rabbitmq-env
       nginx_start: usr/nginx_start
