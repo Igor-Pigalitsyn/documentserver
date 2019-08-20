@@ -23,6 +23,10 @@ apps:
       - network-bind
     environment:
       LD_LIBRARY_PATH: $SNAP/lib
+      LANGUAGE: "en_US.UTF-8"
+      LC_MESSAGES: "en_US.UTF-8"
+      LC_ALL: "en_US.UTF-8"
+      LC_CTYPE: "en_US.UTF-8"
 
   node:
     command: bin/node
@@ -43,6 +47,13 @@ apps:
   #redis:
     #command: whereis redis-server
     #daemon: simple
+  
+  redis:
+    command: redis-server
+    daemon: simple
+
+  postgres:
+    command: usr/start_postgres
 
 
 parts:
@@ -64,6 +75,10 @@ parts:
       #sed -i -e 's/var\/lib/\${SNAP}\/var\/lib/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
       #sed -i -e 's/var\/log/\${SNAP_DATA}\/var\/log/g' $SNAPCRAFT_PART_INSTALL/usr/lib/rabbitmq/bin/rabbitmq-script-wrapper
       sed -i -e 's/ROOTDIR=/ROOTDIR=$SNAP/g' $SNAPCRAFT_PART_INSTALL/usr/lib/erlang/bin/erl
+    
+  #postgresql96:
+    #plugin: dump
+    #source: https://ftp.postgresql.org/pub/source/v9.6.9/postgresql-9.6.9.tar.bz2
 
   docserver:
     plugin: dump
@@ -80,11 +95,10 @@ parts:
       - fonts-opensymbol
       - create-resources
       - libreadline-dev
-      #- rabbitmq-server
-      #- postgresql
-      #- locales
-      #- locales-all
-      #- libc-bin
+      - libc-bin
+      - locales-all
+      - locales
+      - libc6
     stage-snaps:
       - postgresql96
     override-build: |
@@ -212,3 +226,6 @@ parts:
       rabbitmq-env.conf: etc/rabbitmq/rabbitmq-env.conf
       rabbitmq-env: usr/lib/rabbitmq/lib/rabbitmq_server-3.6.15/sbin/rabbitmq-env
       nginx_start: usr/nginx_start
+      locale.conf: etc/locale.conf
+      locale: etc/default/locale
+      start_postgres: usr/start_postgres

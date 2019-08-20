@@ -1,0 +1,12 @@
+#!/bin/bash
+export I18NPATH=$SNAP/usr/share/i18n
+export LOCPATH=$SNAP_USER_DATA
+export LC_ALL=$LANG
+LANG1=$(echo $LANG | cut -f1 -d.)
+ENC=UTF-8
+LOC="$LANG"
+# generate a locale so we get properly working charsets and graphics
+if [ ! -e $SNAP_USER_DATA/$LOC ]; then
+  $SNAP/usr/bin/localedef --prefix=$SNAP_USER_DATA -f $ENC -i $LANG1 $SNAP_USER_DATA/$LOC
+fi
+
