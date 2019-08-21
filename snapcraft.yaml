@@ -21,6 +21,7 @@ apps:
       - desktop-legacy
       - network
       - network-bind
+      - locale-control
     environment:
       LD_LIBRARY_PATH: $SNAP/lib
       LANGUAGE: "en_US.UTF-8"
@@ -53,8 +54,30 @@ apps:
     daemon: simple
 
   postgres:
-    command: usr/start_postgres
+    command: usr/bin/initdb
 
+  initialize:
+    command: usr/bin/wrapper-initialize
+
+  psql:
+    command: usr/bin/wrapper-psql
+    plugs: [network]
+
+  pgctl:
+    command: usr/bin/wrapper-pg_ctl
+    plugs:
+      - network
+      - network-bind
+
+  confdb:
+    command: usr/start_postgres
+    plugs:
+      - network
+      - network-bind
+  
+  createdb:
+    command: usr/bin/createdb
+    plugs: [network]
 
 parts:
   #redis:
