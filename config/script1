@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+/snap/docserver/current/usr/bin/wrapper-initialize initdb
+/snap/docserver/x1/usr/bin/pg_ctl -D /home/postgres/snap/docserver/common/data -l logfile start
+sleep 1
+/snap/docserver/x1/usr/bin/pg_ctl -D /home/postgres/snap/docserver/common/data -l logfile start
+/snap/docserver/current/usr/bin/wrapper-psql -h 127.0.0.1 -c "CREATE DATABASE onlyoffice;"
+/snap/docserver/current/usr/bin/wrapper-psql -h 127.0.0.1 -c "CREATE USER onlyoffice WITH password 'onlyoffice';"
+/snap/docserver/current/usr/bin/wrapper-psql -h 127.0.0.1 -c "GRANT ALL privileges ON DATABASE onlyoffice TO onlyoffice;"

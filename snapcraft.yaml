@@ -22,12 +22,12 @@ apps:
       - network
       - network-bind
       - locale-control
-    environment:
-      LD_LIBRARY_PATH: $SNAP/lib
-      LANGUAGE: "en_US.UTF-8"
-      LC_MESSAGES: "en_US.UTF-8"
-      LC_ALL: "en_US.UTF-8"
-      LC_CTYPE: "en_US.UTF-8"
+    #environment:
+      #LD_LIBRARY_PATH: $SNAP/lib
+      #LANGUAGE: "en_US.UTF-8"
+      #LC_MESSAGES: "en_US.UTF-8"
+      #LC_ALL: "en_US.UTF-8"
+      #LC_CTYPE: "en_US.UTF-8"
 
   node:
     command: bin/node
@@ -70,10 +70,23 @@ apps:
       - network-bind
 
   confdb:
-    command: usr/start_postgres
+    command: script1
     plugs:
+      - home
+      - desktop
+      - desktop-legacy
       - network
       - network-bind
+      - locale-control
+    #environment: maybe
+      #LD_LIBRARY_PATH: $SNAP/lib
+      #LANGUAGE: "en_US.UTF-8"
+      #LC_MESSAGES: "en_US.UTF-8"
+      #LC_ALL: "en_US.UTF-8"
+      #LC_CTYPE: "en_US.UTF-8"
+
+  create:
+    command: script2  
   
   createdb:
     command: usr/bin/createdb
@@ -140,6 +153,7 @@ parts:
       snapcraftctl build
       # posgresql
       cp $SNAPCRAFT_PART_INSTALL/lib/x86_64-linux-gnu/libreadline.so.7.0 $SNAPCRAFT_PART_INSTALL/lib/x86_64-linux-gnu/libreadline.so.6
+      #sed -i -e 's/localedef/$SNAP\/usr\/bin\/localedef/g' $SNAPCRAFT_PART_INSTALL/usr/bin/wrapper-initialize
       # edition supervisor/* && /supervisord.conf ds-example.conf
       sed -i -e 's/\/var\/www/%(ENV_SNAP)s\/var\/www/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
       sed -i -e 's/\/etc/%(ENV_SNAP)s\/etc/g' $SNAPCRAFT_PART_INSTALL/etc/onlyoffice/documentserver/supervisor/*
@@ -252,3 +266,4 @@ parts:
       locale.conf: etc/locale.conf
       locale: etc/default/locale
       start_postgres: usr/start_postgres
+      #wrapper-initialize: usr/bin/wrapper-initialize

@@ -2,3 +2,9 @@
 #snapctl set ports.http=80
 #snapctl restart docserver.nginx
 #snap restart docserver.nginx
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver
+mkdir -p $SNAP_DATA/var/log/nginx
+mkdir -p $SNAP_DATA/var/cache/nginx/client_temp
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/nginx.error.log
+touch $SNAP_DATA/var/log/nginx/access.log
+touch $SNAP_DATA/var/log/nginx/error.log
