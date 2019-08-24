@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/snap/docserver/x1/usr/bin/wrapper-pg_ctl -D /home/postgres/snap/docserver/common/data -l logfile start

@@ -2,6 +2,46 @@
 #snapctl set ports.http=80
 #snapctl restart docserver.nginx
 #snap restart docserver.nginx
+
+USER=postgres
+PASS=postgres
+DIR=/home/$USER
+
+	if grep $USER /etc/passwd; then
+		echo "The user $USER Exists"
+	else
+		useradd $USER -p $(openssl passwd -1 $PASS) -U -m -d $DIR  -s /bin/bash; chown -R $USER:$USER $DIR;
+	fi
+
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/converter/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/gc/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/metrics/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver/spellchecker/
+mkdir -p $SNAP_DATA/var/log/supervisor/
+mkdir -p $SNAP_DATA/var/run/
+mkdir -p $SNAP_DATA/var/log/nginx/
+mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver-example
+touch $SNAP_DATA/var/log/supervisor/supervisord.log
+touch $SNAP_DATA/var/run/supervisord.pid
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/docservice/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/converter/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/converter/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/gc/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/gc/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/metrics/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/metrics/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/spellchecker/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver/spellchecker/err.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver-example/out.log
+touch $SNAP_DATA/var/log/onlyoffice/documentserver-example/err.log
+mkdir -p $SNAP_DATA/var/run
+touch $SNAP_DATA/var/run/supervisord.pid
+mkdir -p $SNAP_DATA/var/docserver/common/run/
+mkdir -p $SNAP_DATA/var/lib/rabbitmq/mnesia
+chown -R rabbitmq:rabbitmq $SNAP_DATA/var/lib/rabbitmq/
+
 mkdir -p $SNAP_DATA/var/log/onlyoffice/documentserver
 mkdir -p $SNAP_DATA/var/log/nginx
 mkdir -p $SNAP_DATA/var/cache/nginx/client_temp

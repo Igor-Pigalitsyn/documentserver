@@ -54,7 +54,8 @@ apps:
     daemon: simple
 
   postgres:
-    command: usr/bin/initdb
+    command: postgres_daemon
+    daemon: simple
 
   initialize:
     command: usr/bin/wrapper-initialize
@@ -70,6 +71,7 @@ apps:
       - network-bind
 
   confdb:
+    adapter: none
     command: script1
     plugs:
       - home
@@ -78,19 +80,16 @@ apps:
       - network
       - network-bind
       - locale-control
-    #environment: maybe
-      #LD_LIBRARY_PATH: $SNAP/lib
-      #LANGUAGE: "en_US.UTF-8"
-      #LC_MESSAGES: "en_US.UTF-8"
-      #LC_ALL: "en_US.UTF-8"
-      #LC_CTYPE: "en_US.UTF-8"
 
-  create:
+  createdb:
     command: script2  
   
-  createdb:
-    command: usr/bin/createdb
-    plugs: [network]
+  #createdb:
+    #command: usr/bin/createdb
+    #plugs: [network]
+
+  startpostgres:
+    command: usr/start_postgres
 
 parts:
   #redis:

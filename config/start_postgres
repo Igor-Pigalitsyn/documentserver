@@ -12,5 +12,5 @@ user=postgres
 #docserver.initialize initdb
 
 #/snap/docserver/x1/usr/bin/pg_ctl -D /home/postgres/snap/docserver/common/data -l logfile start
-su - postgres /snap/docserver/current/script1
+su - postgres -c 'docserver.confdb'
 /snap/docserver/current/script2
